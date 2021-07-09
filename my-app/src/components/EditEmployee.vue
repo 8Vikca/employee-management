@@ -110,6 +110,7 @@
 <script>
 import Vue from "vue";
 import EmployeeService from "../Services/EmployeeService";
+import WorkPositionService from "../Services/WorkPositionService";
 
 export default {
   name: "EditEmployee",
@@ -148,7 +149,7 @@ export default {
     },
   methods: {
      retrieveWorkPositions() {
-      EmployeeService.getAllPositions()
+      WorkPositionService.getAllPositions()
         .then((response) => {
           response = response.data;
           response.forEach((element) => {

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Employee-management\\WebApplication1\\WebApplication1\\WebApplication1.csproj": {}
+    "C:\\Users\\viktoria.matusicova\\employee-management\\WebApplication1\\WebApplication1\\WebApplication1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Employee-management\\WebApplication1\\WebApplication1\\WebApplication1.csproj": {
+    "C:\\Users\\viktoria.matusicova\\employee-management\\WebApplication1\\WebApplication1\\WebApplication1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Employee-management\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+        "projectUniqueName": "C:\\Users\\viktoria.matusicova\\employee-management\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
         "projectName": "WebApplication1",
-        "projectPath": "C:\\Users\\Admin\\Employee-management\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Employee-management\\WebApplication1\\WebApplication1\\obj\\",
+        "projectPath": "C:\\Users\\viktoria.matusicova\\employee-management\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+        "packagesPath": "C:\\Users\\viktoria.matusicova\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\viktoria.matusicova\\employee-management\\WebApplication1\\WebApplication1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\viktoria.matusicova\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

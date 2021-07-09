@@ -33,10 +33,15 @@ namespace WebApplication1.Controllers
             return BadRequest();
         }
 
-        [HttpGet("/deleteWorkPosition")]
-        public IActionResult DeletePosition()
+        [HttpPost("/deleteWorkPosition")]
+        public IActionResult DeletePosition([FromBody] WorkPositionViewModel deleteWorkPositionViewModel)
         {
-            return Ok();
+            if (_workPositionService.DeletePosition(deleteWorkPositionViewModel))
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
     }
 }

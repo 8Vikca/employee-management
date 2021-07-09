@@ -8,5 +8,6 @@ namespace WebApplication1.Interfaces.Services
         // alphabetic order
         List<WorkPositionViewModel> GetAllActivePositions();
         bool CreateNewWorkPosition(WorkPositionViewModel workPositionViewModel);
+        public bool DeletePosition(WorkPositionViewModel workPositionViewModel);
     }
 }

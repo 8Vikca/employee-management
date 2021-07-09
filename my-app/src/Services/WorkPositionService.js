@@ -4,9 +4,12 @@ class WorkPositionService {
         return http.get("/getWorkPositions");  
       }  
       createNewWorkPosition(workPositionModel) {
-        console.log(workPositionModel);
         return http.post("/createWorkPosition", JSON.stringify(workPositionModel));
     }
+    deleteWorkPosition(workPositionModel) {
+      console.log(workPositionModel);
+      return http.post("/deleteWorkPosition", JSON.stringify(workPositionModel));
+  }
         
 }  
 export default new WorkPositionService();  

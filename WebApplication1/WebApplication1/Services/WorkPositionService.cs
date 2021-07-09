@@ -47,5 +47,23 @@ namespace WebApplication1.Services
                 throw e;
             }
         }
+
+        public bool DeletePosition(WorkPositionViewModel workPositionViewModel)
+        {
+            try
+            {
+                var workPositionById = _workPositionRepository.FindPositionById(workPositionViewModel.Id);
+                if (workPositionById == null)
+                {
+                    return false;
+                }
+                _workPositionRepository.RemoveWorkPosition(workPositionById);
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }

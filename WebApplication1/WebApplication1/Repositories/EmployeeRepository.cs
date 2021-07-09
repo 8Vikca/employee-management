@@ -86,7 +86,7 @@ namespace WebApplication1.Repositories
             return employeeById;
         }
 
-        public bool RemoveFromDatabase(EmployeeModel employee)
+        public bool RemoveEmployee(EmployeeModel employee)
         {
             _appDbContext.Employees.Remove(employee);
             return true;

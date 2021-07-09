@@ -88,13 +88,13 @@ namespace WebApplication1.Services
                 {
                     return false; 
                 }
-                _employeeRepository.RemoveFromDatabase(employee);
+                _employeeRepository.RemoveEmployee(employee);
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
 

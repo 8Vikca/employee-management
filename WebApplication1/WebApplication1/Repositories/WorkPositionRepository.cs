@@ -44,5 +44,20 @@ namespace WebApplication1.Repositories
 
             return true;
         }
+
+        public WorkPositionModel FindPositionById(int id)
+        {
+            var workPositionById = _appDbContext.WorkPositions.FirstOrDefault(position => position.Id == id);
+            return workPositionById;
+        }
+
+
+        public bool RemoveWorkPosition(WorkPositionModel workPosition)
+        {
+            workPosition.IsActive = false;
+            _appDbContext.WorkPositions.Update(workPosition);
+            _appDbContext.SaveChanges();
+            return true;
+        }
     }
 }

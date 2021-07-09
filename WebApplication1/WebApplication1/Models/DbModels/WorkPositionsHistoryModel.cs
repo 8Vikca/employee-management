@@ -4,7 +4,6 @@ namespace WebApplication1.Models.DbModels
 {
     public class WorkPositionsHistoryModel
     {
-        //realation 
         public int Id { get; set; }
         public int EmployeeId { get; set; }
         public EmployeeModel Employee { get; set; }

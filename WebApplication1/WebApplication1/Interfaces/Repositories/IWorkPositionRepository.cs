@@ -9,5 +9,7 @@ namespace WebApplication1.Interfaces.Repositories
         IEnumerable<WorkPositionModel> GetAllActiveWorkPositions();
         string GetWorkPositionById(int id);
         bool CreateNewWorkPosition(WorkPositionViewModel newWorkPositionModel);
+        WorkPositionModel FindPositionById(int id);
+        bool RemoveWorkPosition(WorkPositionModel workPosition);
     }
 }

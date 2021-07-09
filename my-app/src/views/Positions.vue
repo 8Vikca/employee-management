@@ -1,11 +1,12 @@
 <template>
   <v-data-table :headers="headers" :items="positions" class="elevation-1">
     <template v-slot:top>
-        <!-- <edit-employee :visible="showEditDialog" @close="showEditDialog=false" :editedEmployee="editedItem" @createdNewEmployee="getNewData"> </edit-employee> -->
       <v-toolbar flat>
         <v-spacer></v-spacer>
-        <new-work-position @createdNewEmployee="getNewData"></new-work-position>
-        
+        <new-work-position
+          @createdNewWorkPosition="getNewData"
+        ></new-work-position>
+
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5">
@@ -34,17 +35,16 @@
 </template>
 
 <script>
-
 import EmployeeService from "../Services/EmployeeService";
+import WorkPositionService from "../Services/WorkPositionService";
 import NewWorkPosition from "../components/NewWorkPosition.vue";
 
-  export default {
-    name: 'Positions',
-    components: {
-      NewWorkPosition
-    },
-    data: () => ({
-    showEditDialog: false,
+export default {
+  name: "Positions",
+  components: {
+    NewWorkPosition,
+  },
+  data: () => ({
     positions: [],
     dialogDelete: false,
     headers: [
@@ -52,8 +52,12 @@ import NewWorkPosition from "../components/NewWorkPosition.vue";
       { text: "Actions", value: "actions", sortable: false },
     ],
     editedIndex: -1,
-    defaultItem: {
+    editedItem: {
       workPositionId: -1,
+      workPositionName: ""
+    },
+    defaultItem: {
+      Id: -1,
       workPositionName: "",
     },
   }),
@@ -75,21 +79,35 @@ import NewWorkPosition from "../components/NewWorkPosition.vue";
       this.retrievePositions();
     },
     retrievePositions() {
-        EmployeeService.getAllPositions().then(response => {
-          this.positions = response.data;
+      EmployeeService.getAllPositions()
+        .then((response) => {
+          response = response.data;
+          this.positions = [];
+          response.forEach((element) => {
+            this.positions.push({
+              workPositionName: element.workPositionName,
+              workPositionId: element.id,
+            });
+          });
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
-      },
+    },
     deleteItem(item) {
       this.editedIndex = this.positions.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedItem = {
+        id: this.editedIndex,
+        workPositionName: item.workPositionName
+      }
+
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+      WorkPositionService.deleteWorkPosition(this.editedItem);
+      // this.desserts.splice(this.editedIndex, 1);
       this.closeDelete();
+      this.retrievePositions();
     },
     close() {
       this.dialog = false;
