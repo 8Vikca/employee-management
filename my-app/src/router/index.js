@@ -17,8 +17,8 @@ const routes = [
     redirect: '/active',
   },
   {
-    path: '/inactive',
-    name: 'Inactive',
+    path: '/archived',
+    name: 'archived',
     component: Inactive
   },
   {

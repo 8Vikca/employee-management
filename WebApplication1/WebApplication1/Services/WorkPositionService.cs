@@ -28,8 +28,7 @@ namespace WebApplication1.Services
                 var workPositionViewModel = new WorkPositionViewModel
                 {
                     WorkPositionName = activePosition.WorkPositionName,
-                    Id = activePosition.Id
-                    
+                    Id = activePosition.Id 
                 };
 
                 listOfPositions.Add(workPositionViewModel);
@@ -85,7 +84,6 @@ namespace WebApplication1.Services
                     EndDate = historyPosition.EndDate.ToString()
 
                 };
-
                 listOfHistoryWorkPositions.Add(historyPositionViewModel);
             }
 

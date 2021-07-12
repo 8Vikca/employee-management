@@ -86,6 +86,17 @@
                 ></v-date-picker>
               </v-menu>
             </v-col>
+
+            <template>
+              <v-data-table
+              height="150px"
+                :headers="headers"
+                fixed-header
+                :items="editedEmployee.historyOfWorkPositions"
+                :hide-default-footer="true"
+                class="elevation-1"
+              ></v-data-table>
+            </template>
           </v-row>
         </v-container>
       </v-form>
@@ -116,6 +127,11 @@ export default {
   name: "EditEmployee",
   props: ["visible", "editedEmployee"],
   data: () => ({
+    headers: [
+          { text: 'Work Position', sortable: false, value: 'workPositionName' },
+          { text: 'StartDate', value: 'startDate' },
+          { text: 'EndDate', value: 'endDate' },
+        ],
     activePicker: null,
     nameRules: [
       (v) => !!v || "Name is required",
@@ -126,6 +142,7 @@ export default {
     positions: [],
     menu2: false,
     dialog: false,
+    dataRendered: false,
   }),
   watch: {
     menu(val) {

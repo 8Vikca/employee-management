@@ -37,7 +37,7 @@
         small
         class="mr-2"
         @click="editItem(item)"
-        @click.stop="showEditDialog = true"
+        
       >
         mdi-pencil
       </v-icon>
@@ -76,7 +76,7 @@ export default {
       { text: "Actions", value: "actions", sortable: false },
     ],
     employees: [],
-    historyOfWorkPositions: [],
+  
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -86,6 +86,7 @@ export default {
       salary: 0,
       address: "",
       id: 0,
+      historyOfWorkPositions: [],
     },
     deletedItem: {
       id: 0,
@@ -141,12 +142,14 @@ export default {
     getHistoryOfWorkPositions(employeeId) {
       WorkPositionService.getHistoryOfWorkPositions(employeeId)
         .then((response) => {
-          this.historyOfWorkPositions = [];
+          this.editedItem.historyOfWorkPositions = [];
           response = response.data;
           response.forEach((element) => {
-            this.historyOfWorkPositions.push(element);
+            element.startDate = element.startDate.split(" ")[0];
+            element.endDate = element.endDate.split(" ")[0];
+            this.editedItem.historyOfWorkPositions.push(element);
           });
-          console.log(this.historyOfWorkPositions);
+          this.showEditDialog = true;
         })
         .catch((e) => {
           console.log(e);
@@ -154,10 +157,10 @@ export default {
     },
     editItem(item) {
       this.editedIndex = this.employees.indexOf(item);
-
-      this.getHistoryOfWorkPositions(item.id);
       this.editedItem = Object.assign({}, item);
+      this.getHistoryOfWorkPositions(item.id);      
       this.editedItem.birthDate = this.editedItem.birthDate.split("T")[0];
+      console.log(this.editedItem);
     },
     deleteItem(item) {
       this.editedIndex = this.positions.indexOf(item) + 1;

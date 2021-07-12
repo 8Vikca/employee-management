@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app dark>
       <v-btn text router-link to="Active"> Active Employees </v-btn>
-      <v-btn text router-link to="Inactive"> Archived Employees </v-btn>
+      <v-btn text router-link to="Archived"> Archived Employees </v-btn>
       <v-btn text router-link to="Positions"> Work Positions </v-btn>
       <v-spacer></v-spacer>
     </v-app-bar>
