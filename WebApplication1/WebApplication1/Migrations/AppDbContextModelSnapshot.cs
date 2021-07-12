@@ -29,7 +29,7 @@ namespace WebApplication1.Migrations
                     b.Property<int?>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("StartDate")
@@ -77,8 +77,7 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("WorkPositionId")
-                        .IsRequired()
+                    b.Property<int>("WorkPositionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -95,9 +94,6 @@ namespace WebApplication1.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -107,44 +103,6 @@ namespace WebApplication1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("WorkPositions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsActive = true,
-                            WorkPositionName = "Tester"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsActive = true,
-                            WorkPositionName = "Programmer"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsActive = true,
-                            WorkPositionName = "Support"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsActive = true,
-                            WorkPositionName = "Analyst"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IsActive = true,
-                            WorkPositionName = "Businessman"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IsActive = true,
-                            WorkPositionName = "Other"
-                        });
                 });
 
             modelBuilder.Entity("WebApplication1.Models.DbModels.WorkPositionsHistoryModel", b =>
@@ -165,17 +123,12 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("WebApplication1.Models.EmployeeModel", b =>
                 {
                     b.HasOne("WebApplication1.Models.WorkPositionModel", "WorkPosition")
-                        .WithMany("Employee")
+                        .WithMany()
                         .HasForeignKey("WorkPositionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("WorkPosition");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.WorkPositionModel", b =>
-                {
-                    b.Navigation("Employee");
                 });
 #pragma warning restore 612, 618
         }

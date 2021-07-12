@@ -10,8 +10,8 @@ using WebApplication1.Models;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210707124916_nullableDatetime")]
-    partial class nullableDatetime
+    [Migration("20210712100119_DatetimeNullable")]
+    partial class DatetimeNullable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,19 +28,23 @@ namespace WebApplication1.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<int?>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("WorkPositionId")
+                    b.Property<int?>("WorkPositionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("WorkPositionId");
 
                     b.ToTable("WorkPositionsHistory");
                 });
@@ -80,6 +84,8 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("WorkPositionId");
+
                     b.ToTable("Employees");
                 });
 
@@ -99,44 +105,32 @@ namespace WebApplication1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("WorkPositions");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsActive = true,
-                            WorkPositionName = "Tester"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsActive = true,
-                            WorkPositionName = "Programmer"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsActive = true,
-                            WorkPositionName = "Support"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsActive = true,
-                            WorkPositionName = "Analyst"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IsActive = true,
-                            WorkPositionName = "Businessman"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IsActive = true,
-                            WorkPositionName = "Other"
-                        });
+            modelBuilder.Entity("WebApplication1.Models.DbModels.WorkPositionsHistoryModel", b =>
+                {
+                    b.HasOne("WebApplication1.Models.EmployeeModel", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("WebApplication1.Models.WorkPositionModel", "WorkPosition")
+                        .WithMany()
+                        .HasForeignKey("WorkPositionId");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("WorkPosition");
+                });
+
+            modelBuilder.Entity("WebApplication1.Models.EmployeeModel", b =>
+                {
+                    b.HasOne("WebApplication1.Models.WorkPositionModel", "WorkPosition")
+                        .WithMany()
+                        .HasForeignKey("WorkPositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WorkPosition");
                 });
 #pragma warning restore 612, 618
         }

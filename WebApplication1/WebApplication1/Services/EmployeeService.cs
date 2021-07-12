@@ -19,7 +19,7 @@ namespace WebApplication1.Services
             _workPositionRepository = workPositionRepository;
         }
 
-        public List<EmployeeViewModel> GetActiveEmployees() 
+        public List<EmployeeViewModel> GetActiveEmployees()
         {
             var employeeRepository = _employeeRepository.GetActiveEmployees().ToList();
             var activeEmployeesList = ModelToViewModel(employeeRepository);
@@ -32,7 +32,7 @@ namespace WebApplication1.Services
             var inactiveEmployeesList = ModelToViewModel(employeeRepository);
             return inactiveEmployeesList;
         }
-        private List<EmployeeViewModel> ModelToViewModel(List<EmployeeModel>employeeModel)
+        private List<EmployeeViewModel> ModelToViewModel(List<EmployeeModel> employeeModel)
         {
             var employeesList = new List<EmployeeViewModel>();
 
@@ -46,14 +46,15 @@ namespace WebApplication1.Services
                     Address = item.Address,
                     BirthDate = item.BirthDate,
                     Salary = item.Salary,
-                    WorkPositionName = _workPositionRepository.GetWorkPositionById(item.WorkPositionId) 
+                    WorkPositionName = item.WorkPosition.WorkPositionName,
+                    DeletedDate = item.DeletedDate
                 };
                 employeesList.Add(employee);
             }
             return employeesList;
         }
 
-        public bool CreateEmployee(NewEmployeeViewModel employee) 
+        public bool CreateEmployee(NewEmployeeViewModel employee)
         {
             try
             {
@@ -66,11 +67,11 @@ namespace WebApplication1.Services
             }
         }
 
-        public bool EditEmployee(EditEmployeeViewModel employee) 
+        public bool EditEmployee(EditEmployeeViewModel employee)
         {
             try
             {
-                _employeeRepository.EditEmployee(employee);
+                _employeeRepository.EditEmployee(employee);         
                 return true;
             }
             catch (Exception e)
@@ -93,30 +94,28 @@ namespace WebApplication1.Services
             }
             catch (Exception e)
             {
-
                 throw e;
             }
         }
 
-            public bool ArchiveEmployee(DeleteEmployeeViewModel employee)
+        public bool ArchiveEmployee(DeleteEmployeeViewModel employee)
+        {
+            try
             {
-                try
+                var employeeById = _employeeRepository.FindEmployeeById(employee.Id);
+                if (employeeById == null)
                 {
-                    var employeeById = _employeeRepository.FindEmployeeById(employee.Id);
-                    if (employeeById == null)
-                    {
-                        return false;
-                    }
-                    employeeById.DeletedDate = DateTime.Parse(employee.DeletedDate).Date;
-                    _employeeRepository.MoveEmployeeToArchive(employeeById);
-                    return true;
+                    return false;
                 }
-                catch (Exception e)
-                {
-
-                    throw e;
-                }
+                employeeById.DeletedDate = DateTime.Parse(employee.DeletedDate).Date;
+                _employeeRepository.MoveEmployeeToArchive(employeeById);
+                return true;
             }
-
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
+
+    }
 }

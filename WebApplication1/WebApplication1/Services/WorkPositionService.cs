@@ -67,5 +67,29 @@ namespace WebApplication1.Services
                 throw e;
             }
         }
+
+        public List<HistoryOfWorkPositionsViewModel> GetHistoryOfWorkPositions(int employeeId)
+        {
+            var historyPositionsByEmployee = _workPositionRepository.GetHistoryOfPositionsByEmployee(employeeId).ToList();
+
+             var listOfHistoryWorkPositions = new List<HistoryOfWorkPositionsViewModel>();
+
+
+            foreach (var historyPosition in historyPositionsByEmployee)
+            {
+                var historyPositionViewModel = new HistoryOfWorkPositionsViewModel
+                {
+                    Id = historyPosition.Id,
+                    WorkPositionName = historyPosition.WorkPosition.WorkPositionName,
+                    StartDate = historyPosition.StartDate.ToString(),
+                    EndDate = historyPosition.EndDate.ToString()
+
+                };
+
+                listOfHistoryWorkPositions.Add(historyPositionViewModel);
+            }
+
+            return listOfHistoryWorkPositions;
+        }
     }
 }

@@ -45,7 +45,7 @@
                 :items="positions"
                 label="Work Position"
                 v-model="editedEmployee.workPositionName"
-                :item-text ="editedEmployee.workPositionName"
+                :item-text="editedEmployee.workPositionName"
                 :rules="[(v) => !!v || 'Work position is required']"
                 required
               ></v-select>
@@ -108,7 +108,6 @@
 </template>
 
 <script>
-
 import Vue from "vue";
 import EmployeeService from "../Services/EmployeeService";
 import WorkPositionService from "../Services/WorkPositionService";
@@ -128,11 +127,11 @@ export default {
     menu2: false,
     dialog: false,
   }),
-   watch: {
-      menu (val) {
-        val && setTimeout(() => (this.activePicker = 'YEAR'))
-      },
+  watch: {
+    menu(val) {
+      val && setTimeout(() => (this.activePicker = "YEAR"));
     },
+  },
   computed: {
     show: {
       get() {
@@ -147,9 +146,9 @@ export default {
   },
   created() {
     this.retrieveWorkPositions();
-    },
+  },
   methods: {
-     retrieveWorkPositions() {
+    retrieveWorkPositions() {
       WorkPositionService.getAllPositions()
         .then((response) => {
           response = response.data;
@@ -168,7 +167,7 @@ export default {
       EmployeeService.editEmployee(this.editedEmployee).then(
         (response) => {
           console.log(response);
-          this.$emit('createdNewEmployee', 'true'); 
+          this.$emit("createdNewEmployee", "true");
         },
         (error) => {
           console.log(error);

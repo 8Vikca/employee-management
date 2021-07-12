@@ -19,7 +19,9 @@
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="deleteItemNoArchive">No</v-btn>
+              <v-btn color="blue darken-1" text @click="deleteItemNoArchive"
+                >No</v-btn
+              >
               <v-btn color="red darken-1" text @click="deleteItemArchive">
                 Yes
               </v-btn>
@@ -49,8 +51,8 @@
 
 
 <script>
-
 import EmployeeService from "../Services/EmployeeService";
+import WorkPositionService from "../Services/WorkPositionService";
 import NewEmployee from "../components/NewEmployee.vue";
 import EditEmployee from "../components/EditEmployee.vue";
 
@@ -74,7 +76,7 @@ export default {
       { text: "Actions", value: "actions", sortable: false },
     ],
     employees: [],
-
+    historyOfWorkPositions: [],
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -87,7 +89,7 @@ export default {
     },
     deletedItem: {
       id: 0,
-      deletedDate: ""
+      deletedDate: "",
     },
     defaultItem: {
       name: "",
@@ -136,8 +138,24 @@ export default {
           console.log(e);
         });
     },
+    getHistoryOfWorkPositions(employeeId) {
+      WorkPositionService.getHistoryOfWorkPositions(employeeId)
+        .then((response) => {
+          this.historyOfWorkPositions = [];
+          response = response.data;
+          response.forEach((element) => {
+            this.historyOfWorkPositions.push(element);
+          });
+          console.log(this.historyOfWorkPositions);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     editItem(item) {
       this.editedIndex = this.employees.indexOf(item);
+
+      this.getHistoryOfWorkPositions(item.id);
       this.editedItem = Object.assign({}, item);
       this.editedItem.birthDate = this.editedItem.birthDate.split("T")[0];
     },
@@ -145,15 +163,16 @@ export default {
       this.editedIndex = this.positions.indexOf(item) + 1;
       this.deletedItem = {
         id: item.id,
-        deletedDate: ""
-      }
+        deletedDate: "",
+      };
       this.dialogDelete = true;
     },
     deleteItemArchive() {
       this.deletedItem.deletedDate = new Date(
-                        Date.now() - new Date().getTimezoneOffset() * 60000)
-                        .toISOString()
-                        .substr(0, 10)
+        Date.now() - new Date().getTimezoneOffset() * 60000
+      )
+        .toISOString()
+        .substr(0, 10);
       EmployeeService.archiveEmployee(this.deletedItem)
         .then((response) => {
           console.log(response);
@@ -172,7 +191,7 @@ export default {
       });
     },
     deleteItemNoArchive() {
-       this.deletedItem.deletedDate = "";
+      this.deletedItem.deletedDate = "";
       EmployeeService.deleteEmployee(this.deletedItem)
         .then((response) => {
           console.log(response);

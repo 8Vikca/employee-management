@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models
 {
@@ -22,6 +23,7 @@ namespace WebApplication1.Models
         public DateTime OnBoardDate { get; set; }
 
         [Required]
+        [ForeignKey("Employee")]
         public int WorkPositionId { get; set; }
         
         [Required]

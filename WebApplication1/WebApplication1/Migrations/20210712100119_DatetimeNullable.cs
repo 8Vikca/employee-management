@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApplication1.Migrations
 {
-    public partial class nullableDatetime : Migration
+    public partial class DatetimeNullable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<DateTime>(
-                name: "DeletedDate",
-                table: "Employees",
+                name: "EndDate",
+                table: "WorkPositionsHistory",
                 type: "datetime2",
                 nullable: true,
                 oldClrType: typeof(DateTime),
@@ -19,8 +19,8 @@ namespace WebApplication1.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<DateTime>(
-                name: "DeletedDate",
-                table: "Employees",
+                name: "EndDate",
+                table: "WorkPositionsHistory",
                 type: "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),

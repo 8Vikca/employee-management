@@ -29,7 +29,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
+        <v-btn color="blue darken-1" text @click="close" > Cancel </v-btn>
         <v-btn
           :disabled="!valid"
           color="blue darken-1"
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import EmployeeService from "../Services/EmployeeService";
+import WorkPositionService from "../Services/WorkPositionService";
 
 export default {
   name: "NewWorkPosition",
@@ -63,20 +63,19 @@ export default {
     dialog(val) {
       val || this.close();
     },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
+    // dialogDelete(val) {
+    //   val || this.closeDelete();
+    // },
   },
 
   created() {
   },
 
   methods: {
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-
+    // deleteItemConfirm() {
+    //   this.desserts.splice(this.editedIndex, 1);
+    //   this.closeDelete();
+    // },
     close() {
       this.dialog = false;
       this.$nextTick(() => {
@@ -85,20 +84,21 @@ export default {
       });
     },
 
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
+    // closeDelete() {
+    //   this.dialogDelete = false;
+    //   this.$nextTick(() => {
+    //     this.editedItem = Object.assign({}, this.defaultItem);
+    //     this.editedIndex = -1;
+    //   });
+    // },
 
     createNewWorkPosition() {
       this.close();
-      EmployeeService.createNewWorkPosition(this.newWorkPosition).then(
+      WorkPositionService.createNewWorkPosition(this.newWorkPosition).then(
         (response) => {
           console.log(response);
-          this.$emit('createdNewWorkPosition', 'true')   
+          this.$emit('createdNewWorkPosition', 'true');
+          this.newWorkPosition.workPositionName = "";
         },
         (error) => {
           console.log(error);

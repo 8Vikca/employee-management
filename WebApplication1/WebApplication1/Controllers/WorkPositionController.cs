@@ -43,5 +43,12 @@ namespace WebApplication1.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost("/getHistoryOfWorkPositions")]
+        public List<HistoryOfWorkPositionsViewModel> getHistoryOfPositions([FromBody] int employeeId)
+        {
+
+            return _workPositionService.GetHistoryOfWorkPositions(employeeId);
+        }
     }
 }

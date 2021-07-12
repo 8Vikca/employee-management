@@ -11,17 +11,19 @@ namespace WebApplication1.Repositories
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly AppDbContext _appDbContext;
+        IWorkPositionRepository _workPositionRepository;
 
-        public EmployeeRepository(AppDbContext appdbContext)
+        public EmployeeRepository(AppDbContext appdbContext, IWorkPositionRepository workPositionRepository)
         {
             _appDbContext = appdbContext;
+            _workPositionRepository = workPositionRepository;
         }
 
         public IEnumerable<EmployeeModel> GetActiveEmployees() //Ienumerable vs Iqueryable
         {
             try
             {
-                var activeEmployee = _appDbContext.Employees.Where(x => x.DeletedDate == null);
+                var activeEmployee = _appDbContext.Employees.Include(x => x.WorkPosition).Where(x => x.DeletedDate == null);
                 return activeEmployee;
             }
             catch (Exception ex)
@@ -32,14 +34,14 @@ namespace WebApplication1.Repositories
 
         public IEnumerable<EmployeeModel> GetInActiveEmployees()
         {
-            var activeEmployee = _appDbContext.Employees.Where(x => x.DeletedDate != null);
+            var activeEmployee = _appDbContext.Employees.Include(x => x.WorkPosition).Where(x => x.DeletedDate != null);
             return activeEmployee;
         }
 
         public bool CreateEmployee(NewEmployeeViewModel newEmployee)
         {
-            var findWorkPositionByName = _appDbContext.WorkPositions.FirstOrDefault(x => x.WorkPositionName == newEmployee.WorkPositionName);
-            if (findWorkPositionByName == null)
+            var findWorkPositionId = _appDbContext.WorkPositions.FirstOrDefault(x => x.WorkPositionName == newEmployee.WorkPositionName);
+            if (findWorkPositionId == null)
                 return false;
 
             var employeeModel = new EmployeeModel()
@@ -50,12 +52,14 @@ namespace WebApplication1.Repositories
                 BirthDate = newEmployee.BirthDate.Date,
                 OnBoardDate = newEmployee.OnBoardDate.Date,
                 Salary = Convert.ToDouble(newEmployee.Salary),
-                WorkPositionId = findWorkPositionByName.Id,
+                WorkPositionId = findWorkPositionId.Id,
                 DeletedDate = null
             };
 
             _appDbContext.Employees.Add(employeeModel);
             _appDbContext.SaveChanges();
+
+            _workPositionRepository.AddWorkPositionToHistory(newEmployee, findWorkPositionId.Id);
 
             return true;
         }
@@ -64,8 +68,12 @@ namespace WebApplication1.Repositories
             var findWorkPositionByName = _appDbContext.WorkPositions.FirstOrDefault(x => x.WorkPositionName == editedEmployee.WorkPositionName);
             var employeeById = _appDbContext.Employees.FirstOrDefault(x => x.Id == editedEmployee.Id);
 
+
             if (employeeById == null || findWorkPositionByName == null)
                 return false;
+
+            if (employeeById.WorkPositionId != findWorkPositionByName.Id)
+                _workPositionRepository.EditWorkPositionInHistory(editedEmployee, employeeById.Id);
 
             employeeById.Name = editedEmployee.Name;
             employeeById.Surname = editedEmployee.Surname;
@@ -95,6 +103,10 @@ namespace WebApplication1.Repositories
         public bool MoveEmployeeToArchive(EmployeeModel employee)
         {
             _appDbContext.Employees.Update(employee);
+
+            var historyWorkPositionById = _appDbContext.WorkPositionsHistory.FirstOrDefault(x => x.EmployeeId == employee.Id && x.EndDate == null);
+            historyWorkPositionById.EndDate = DateTime.UtcNow.Date;
+            _appDbContext.WorkPositionsHistory.Update(historyWorkPositionById);
             _appDbContext.SaveChanges();
             return true;
 

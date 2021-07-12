@@ -170,6 +170,15 @@ export default {
       workPositionName: "",
       salary: "",
     },
+    defaultItem: {
+      name: "",
+      surname: "",
+      address: "",
+      birthDate: "",
+      onBoardDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      workPositionName: "",
+      salary: "",
+    },
   }),
 
   watch: {
@@ -230,13 +239,13 @@ export default {
       EmployeeService.createNewEmployee(this.newEmployee).then(
         (response) => {
           console.log(response);
-          this.$emit('createdNewEmployee', 'true')     //zavolat metodu z parent komponentu
+          this.$emit('createdNewEmployee', 'true') 
+          this.newEmployee = Object.assign({}, this.defaultItem);
         },
         (error) => {
           console.log(error);
         }
       );
-      //location.reload();
     },
   },
 };

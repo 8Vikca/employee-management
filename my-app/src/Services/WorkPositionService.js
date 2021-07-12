@@ -9,6 +9,9 @@ class WorkPositionService {
   deleteWorkPosition(workPositionModel) {
     return http.post("/deleteWorkPosition", JSON.stringify(workPositionModel));
   }
+  getHistoryOfWorkPositions(employeeId) {
+    return http.post("/getHistoryOfWorkPositions", JSON.stringify(employeeId));
+  }
 
 }
 export default new WorkPositionService();

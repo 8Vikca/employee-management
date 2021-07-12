@@ -3,6 +3,9 @@ class EmployeeService {
   getAllEmployees() {
     return http.get("/getActiveEmployees");
   }
+  getAllInactiveEmployees() {
+    return http.get("/getInactiveEmployees");
+  }
   createNewEmployee(employeeModel) {
     return http.post("/createEmployee", JSON.stringify(employeeModel));
   }
