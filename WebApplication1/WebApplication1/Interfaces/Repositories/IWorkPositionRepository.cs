@@ -7,9 +7,9 @@ namespace WebApplication1.Interfaces.Repositories
     public interface IWorkPositionRepository
     {
         IEnumerable<WorkPositionModel> GetAllActiveWorkPositions();
-        string GetWorkPositionById(int id);
+        string GetWorkPositionById(int? id);
         bool CreateNewWorkPosition(WorkPositionViewModel newWorkPositionModel);
-        WorkPositionModel FindPositionById(int id);
+        WorkPositionModel FindPositionByName(string workPositionName);
         bool RemoveWorkPosition(WorkPositionModel workPosition);
     }
 }

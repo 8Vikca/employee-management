@@ -17,11 +17,20 @@ namespace WebApplication1.Repositories
 
         public IEnumerable<WorkPositionModel> GetAllActiveWorkPositions()
         {
+            //var pos = _appDbContext.WorkPositions;
+            //foreach (var item in pos)
+            //{
+            //    item.IsActive = true;
+            //    _appDbContext.WorkPositions.Update(item);
+
+
+            //}
+            //_appDbContext.SaveChanges();
             var activeWorkPositions = _appDbContext.WorkPositions.Where(x => x.IsActive);
             return activeWorkPositions;
         }
 
-        public string GetWorkPositionById(int id)
+        public string GetWorkPositionById(int? id)
         {
             var workPosition = _appDbContext.WorkPositions.FirstOrDefault(x => x.Id == id).WorkPositionName;
             return workPosition;
@@ -45,14 +54,14 @@ namespace WebApplication1.Repositories
             return true;
         }
 
-        public WorkPositionModel FindPositionById(int id)
+        public WorkPositionModel FindPositionByName(string workPositionName)
         {
-            var workPositionById = _appDbContext.WorkPositions.FirstOrDefault(position => position.Id == id);
+            var workPositionById = _appDbContext.WorkPositions.FirstOrDefault(position => position.WorkPositionName == workPositionName);
             return workPositionById;
         }
 
 
-        public bool RemoveWorkPosition(WorkPositionModel workPosition)
+        public bool RemoveWorkPosition(WorkPositionModel workPosition) 
         {
             workPosition.IsActive = false;
             _appDbContext.WorkPositions.Update(workPosition);

@@ -6,7 +6,8 @@ namespace WebApplication1.Models
     {
         public int Id { get; set; }
         public string WorkPositionName { get; set; }
-        public ICollection<EmployeeModel> Employee { get; set; }
+        //public int? EmployeeId { get; set; }
+        //public ICollection<EmployeeModel> Employee { get; set; }
         public bool IsActive { get; set; }
     }
 }

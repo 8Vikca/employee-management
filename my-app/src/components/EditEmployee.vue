@@ -108,6 +108,7 @@
 </template>
 
 <script>
+
 import Vue from "vue";
 import EmployeeService from "../Services/EmployeeService";
 import WorkPositionService from "../Services/WorkPositionService";
@@ -164,7 +165,7 @@ export default {
       this.show = false;
       Vue.delete(this.editedEmployee, "fullName");
       Vue.delete(this.editedEmployee, "deletedDate");
-      EmployeeService.sendEditedEmployee(this.editedEmployee).then(
+      EmployeeService.editEmployee(this.editedEmployee).then(
         (response) => {
           console.log(response);
           this.$emit('createdNewEmployee', 'true'); 

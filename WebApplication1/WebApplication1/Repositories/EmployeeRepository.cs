@@ -47,8 +47,8 @@ namespace WebApplication1.Repositories
                 Name = newEmployee.Name,
                 Surname = newEmployee.Surname,
                 Address = newEmployee.Address,
-                BirthDate = newEmployee.BirthDate,
-                OnBoardDate = newEmployee.OnBoardDate,
+                BirthDate = newEmployee.BirthDate.Date,
+                OnBoardDate = newEmployee.OnBoardDate.Date,
                 Salary = Convert.ToDouble(newEmployee.Salary),
                 WorkPositionId = findWorkPositionByName.Id,
                 DeletedDate = null
@@ -70,7 +70,7 @@ namespace WebApplication1.Repositories
             employeeById.Name = editedEmployee.Name;
             employeeById.Surname = editedEmployee.Surname;
             employeeById.Address = editedEmployee.Address;
-            employeeById.BirthDate = DateTime.Parse(editedEmployee.BirthDate);
+            employeeById.BirthDate = DateTime.Parse(editedEmployee.BirthDate).Date;
             employeeById.Salary = Convert.ToDouble(editedEmployee.Salary);
             employeeById.WorkPositionId = findWorkPositionByName.Id;
 
@@ -89,7 +89,16 @@ namespace WebApplication1.Repositories
         public bool RemoveEmployee(EmployeeModel employee)
         {
             _appDbContext.Employees.Remove(employee);
+            _appDbContext.SaveChanges();
             return true;
         }
+        public bool MoveEmployeeToArchive(EmployeeModel employee)
+        {
+            _appDbContext.Employees.Update(employee);
+            _appDbContext.SaveChanges();
+            return true;
+
+        }
+
     }
 }

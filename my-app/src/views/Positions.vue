@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import EmployeeService from "../Services/EmployeeService";
 import WorkPositionService from "../Services/WorkPositionService";
 import NewWorkPosition from "../components/NewWorkPosition.vue";
 
@@ -79,7 +78,7 @@ export default {
       this.retrievePositions();
     },
     retrievePositions() {
-      EmployeeService.getAllPositions()
+      WorkPositionService.getAllPositions()
         .then((response) => {
           response = response.data;
           this.positions = [];
@@ -95,7 +94,8 @@ export default {
         });
     },
     deleteItem(item) {
-      this.editedIndex = this.positions.indexOf(item);
+      console.log(item);
+      this.editedIndex = this.positions.indexOf(item) + 1;
       this.editedItem = {
         id: this.editedIndex,
         workPositionName: item.workPositionName
@@ -104,10 +104,18 @@ export default {
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      WorkPositionService.deleteWorkPosition(this.editedItem);
+      WorkPositionService.deleteWorkPosition(this.editedItem) 
+      .then((response) => {
+          console.log(response);
+          this.retrievePositions();
+          })
+        .catch((e) => {
+          console.log(e);
+        });
+      
       // this.desserts.splice(this.editedIndex, 1);
       this.closeDelete();
-      this.retrievePositions();
+      
     },
     close() {
       this.dialog = false;

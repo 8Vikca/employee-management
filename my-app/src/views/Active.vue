@@ -1,11 +1,17 @@
 <template>
   <v-data-table :headers="headers" :items="employees" class="elevation-1">
     <template v-slot:top>
-        <edit-employee :visible="showEditDialog" @close="showEditDialog=false" :editedEmployee="editedItem" @createdNewEmployee="getNewData"> </edit-employee>
+      <edit-employee
+        :visible="showEditDialog"
+        @close="showEditDialog = false"
+        :editedEmployee="editedItem"
+        @createdNewEmployee="getNewData"
+      >
+      </edit-employee>
       <v-toolbar flat>
         <v-spacer></v-spacer>
         <new-employee @createdNewEmployee="getNewData"></new-employee>
-        
+
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5">
@@ -13,8 +19,8 @@
             </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete">No</v-btn>
-              <v-btn color="red darken-1" text @click="deleteItemConfirm">
+              <v-btn color="blue darken-1" text @click="deleteItemNoArchive">No</v-btn>
+              <v-btn color="red darken-1" text @click="deleteItemArchive">
                 Yes
               </v-btn>
               <v-spacer></v-spacer>
@@ -25,7 +31,14 @@
     </template>
 
     <template v-slot:[`item.actions`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)" @click.stop="showEditDialog=true"> mdi-pencil </v-icon>
+      <v-icon
+        small
+        class="mr-2"
+        @click="editItem(item)"
+        @click.stop="showEditDialog = true"
+      >
+        mdi-pencil
+      </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
     <template v-slot:no-data>
@@ -36,6 +49,7 @@
 
 
 <script>
+
 import EmployeeService from "../Services/EmployeeService";
 import NewEmployee from "../components/NewEmployee.vue";
 import EditEmployee from "../components/EditEmployee.vue";
@@ -70,6 +84,10 @@ export default {
       salary: 0,
       address: "",
       id: 0,
+    },
+    deletedItem: {
+      id: 0,
+      deletedDate: ""
     },
     defaultItem: {
       name: "",
@@ -110,7 +128,7 @@ export default {
               salary: element.salary,
               birthDate: element.birthDate,
               address: element.address,
-              deletedDate: element.deletedDate
+              deletedDate: element.deletedDate,
             });
           });
         })
@@ -124,12 +142,26 @@ export default {
       this.editedItem.birthDate = this.editedItem.birthDate.split("T")[0];
     },
     deleteItem(item) {
-      this.editedIndex = this.employees.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedIndex = this.positions.indexOf(item) + 1;
+      this.deletedItem = {
+        id: item.id,
+        deletedDate: ""
+      }
       this.dialogDelete = true;
     },
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+    deleteItemArchive() {
+      this.deletedItem.deletedDate = new Date(
+                        Date.now() - new Date().getTimezoneOffset() * 60000)
+                        .toISOString()
+                        .substr(0, 10)
+      EmployeeService.archiveEmployee(this.deletedItem)
+        .then((response) => {
+          console.log(response);
+          this.retrieveEmployees();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
       this.closeDelete();
     },
     close() {
@@ -138,6 +170,18 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+    },
+    deleteItemNoArchive() {
+       this.deletedItem.deletedDate = "";
+      EmployeeService.deleteEmployee(this.deletedItem)
+        .then((response) => {
+          console.log(response);
+          this.retrieveEmployees();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.closeDelete();
     },
     closeDelete() {
       this.dialogDelete = false;

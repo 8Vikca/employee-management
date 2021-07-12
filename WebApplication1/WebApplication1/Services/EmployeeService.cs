@@ -79,16 +79,16 @@ namespace WebApplication1.Services
             }
         }
 
-        public bool DeleteEmployee(int id)
+        public bool DeleteEmployee(DeleteEmployeeViewModel employee)
         {
             try
             {
-                var employee = _employeeRepository.FindEmployeeById(id);
-                if (employee == null)
+                var employeeById = _employeeRepository.FindEmployeeById(employee.Id);
+                if (employeeById == null)
                 {
-                    return false; 
+                    return false;
                 }
-                _employeeRepository.RemoveEmployee(employee);
+                _employeeRepository.RemoveEmployee(employeeById);
                 return true;
             }
             catch (Exception e)
@@ -98,5 +98,25 @@ namespace WebApplication1.Services
             }
         }
 
-    }
+            public bool ArchiveEmployee(DeleteEmployeeViewModel employee)
+            {
+                try
+                {
+                    var employeeById = _employeeRepository.FindEmployeeById(employee.Id);
+                    if (employeeById == null)
+                    {
+                        return false;
+                    }
+                    employeeById.DeletedDate = DateTime.Parse(employee.DeletedDate).Date;
+                    _employeeRepository.MoveEmployeeToArchive(employeeById);
+                    return true;
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+
+        }
 }

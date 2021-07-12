@@ -49,10 +49,20 @@ namespace WebApplication1.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("/deleteEmployee")]
-        public IActionResult DeleteEmployee(int emplyeeId)
+        [HttpPost("/deleteEmployee")]
+        public IActionResult DeleteEmployee([FromBody] DeleteEmployeeViewModel deleteEmployeeViewModel)
         {
-            if (!_employeeService.DeleteEmployee(emplyeeId))
+            if (!_employeeService.DeleteEmployee(deleteEmployeeViewModel))
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+
+        [HttpPost("/archiveEmployee")]
+        public IActionResult ArchiveEmployee([FromBody] DeleteEmployeeViewModel deleteEmployeeViewModel)
+        {
+            if (!_employeeService.ArchiveEmployee(deleteEmployeeViewModel))
             {
                 return BadRequest();
             }

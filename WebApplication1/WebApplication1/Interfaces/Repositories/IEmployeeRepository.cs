@@ -10,8 +10,9 @@ namespace WebApplication1.Interfaces.Repositories
         IEnumerable<EmployeeModel> GetActiveEmployees();
         IEnumerable<EmployeeModel> GetInActiveEmployees();
         EmployeeModel FindEmployeeById(int id);
-        bool RemoveEmployee(EmployeeModel employee);
+        bool MoveEmployeeToArchive(EmployeeModel employee);
         bool EditEmployee(EditEmployeeViewModel editedEmployee);
         bool CreateEmployee(NewEmployeeViewModel newEmployee);
+        bool RemoveEmployee(EmployeeModel employee);
     }
 }

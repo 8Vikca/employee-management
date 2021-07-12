@@ -27,7 +27,9 @@ namespace WebApplication1.Services
             {
                 var workPositionViewModel = new WorkPositionViewModel
                 {
-                    WorkPositionName = activePosition.WorkPositionName
+                    WorkPositionName = activePosition.WorkPositionName,
+                    Id = activePosition.Id
+                    
                 };
 
                 listOfPositions.Add(workPositionViewModel);
@@ -52,12 +54,12 @@ namespace WebApplication1.Services
         {
             try
             {
-                var workPositionById = _workPositionRepository.FindPositionById(workPositionViewModel.Id);
-                if (workPositionById == null)
+                var workPositionByName = _workPositionRepository.FindPositionByName(workPositionViewModel.WorkPositionName);
+                if (workPositionByName == null)
                 {
                     return false;
                 }
-                _workPositionRepository.RemoveWorkPosition(workPositionById);
+                _workPositionRepository.RemoveWorkPosition(workPositionByName);
                 return true;
             }
             catch (Exception e)

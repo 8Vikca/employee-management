@@ -146,6 +146,7 @@
 
 <script>
 import EmployeeService from "../Services/EmployeeService";
+import WorkPositionService from '../Services/WorkPositionService';
 
 export default {
   name: "NewEmployee",
@@ -192,7 +193,7 @@ export default {
       this.$refs.menu.save(date);
     },
     retrieveWorkPositions() {
-      EmployeeService.getAllPositions()
+      WorkPositionService.getAllPositions()
         .then((response) => {
           response = response.data;
           response.forEach((element) => {
