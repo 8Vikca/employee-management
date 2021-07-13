@@ -90,15 +90,9 @@ export default {
       { text: "EndDate", value: "endDate" },
     ],
     activePicker: null,
-    nameRules: [
-      (v) => !!v || "Name is required",
-      (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
-    ],
     menu: false,
     positions: [],
-    menu2: false,
     dialog: false,
-    dataRendered: false,
   }),
   watch: {
     menu(val) {

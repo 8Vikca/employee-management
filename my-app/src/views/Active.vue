@@ -10,26 +10,29 @@
       >
         New Employee
       </v-btn>
-      
     </v-toolbar>
     <v-simple-table>
       <template v-slot:default>
-        <new-employee @createdNewEmployee="getNewData"  :visible="showNewEmployeeDialog" @close="showNewEmployeeDialog = false"></new-employee>
+        <new-employee
+          @createdNewEmployee="getNewData"
+          :visible="showNewEmployeeDialog"
+          @close="showNewEmployeeDialog = false"
+        ></new-employee>
         <edit-employee
-        @createdNewEmployee="getNewData"
-        :visible="showEditDialog"
-        @close="showEditDialog = false"
-        :editedEmployee="editedItem"
-      >
-      </edit-employee>
-      
-      <detail-employee
-        :visible="showDetailDialog"
-        :detailedEmployee="editedItem"
-        @close="showDetailDialog = false"
-      ></detail-employee>
+          @createdNewEmployee="getNewData"
+          :visible="showEditDialog"
+          @close="showEditDialog = false"
+          :editedEmployee="editedItem"
+        >
+        </edit-employee>
 
-      <v-dialog v-model="dialogDelete" max-width="500px">
+        <detail-employee
+          :visible="showDetailDialog"
+          :detailedEmployee="editedItem"
+          @close="showDetailDialog = false"
+        ></detail-employee>
+
+        <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5">
               Do you want to archive this employee?
@@ -96,14 +99,8 @@ export default {
     menu2: false,
     dialog: false,
     dialogDelete: false,
-    headers: [
-      { text: "Name", align: "start", value: "fullName" },
-      { text: "Position", value: "workPositionName" },
-      { text: "Actions", value: "actions", sortable: false },
-    ],
     employees: [],
 
-    editedIndex: -1,
     editedItem: {
       name: "",
       surname: "",
@@ -121,8 +118,12 @@ export default {
     defaultItem: {
       name: "",
       surname: "",
-      position: "",
-      lastPositions: "",
+      birthDate: "",
+      workPositionName: "",
+      salary: 0,
+      address: "",
+      id: 0,
+      historyOfWorkPositions: [],
     },
   }),
   watch: {
@@ -155,7 +156,7 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-     },
+    },
     getNewData(value) {
       console.log(value);
       this.retrieveEmployees();
@@ -206,7 +207,6 @@ export default {
       this.editedItem.birthDate = this.editedItem.birthDate.split("T")[0];
     },
     deleteItem(item) {
-      this.editedIndex = this.positions.indexOf(item) + 1;
       this.deletedItem = {
         id: item.id,
         archivedDate: "",
@@ -233,7 +233,6 @@ export default {
       this.dialog = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
       });
     },
     deleteItemNoArchive() {
@@ -252,59 +251,8 @@ export default {
       this.dialogDelete = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
       });
     },
   },
 };
 </script>
-<!-- <v-data-table
-    :headers="headers"
-    :items="employees"
-    class="elevation-1"
-    @click:row="openEmployeeDetail($event)"
-  >
-    <template v-slot:top>
-      <edit-employee
-        :visible="showEditDialog"
-        @close="showEditDialog = false"
-        :editedEmployee="editedItem"
-      >
-      </edit-employee>
-      <v-toolbar flat>
-        <v-spacer></v-spacer>
-        <new-employee @createdNewEmployee="getNewData"></new-employee>
-        <detail-employee
-          :visible="showDetailDialog"
-          :detailedEmployee="editedItem"
-          @close="showDetailDialog = false"
-        ></detail-employee>
-
-        <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5">
-              Do you want to archive this employee?
-            </v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="deleteItemNoArchive"
-                >No</v-btn
-              >
-              <v-btn color="red darken-1" text @click="deleteItemArchive">
-                Yes
-              </v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-
-    <template v-slot:[`item.actions`]="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-    </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="retrieveEmployees"> Reset </v-btn>
-    </template>
-  </v-data-table> -->

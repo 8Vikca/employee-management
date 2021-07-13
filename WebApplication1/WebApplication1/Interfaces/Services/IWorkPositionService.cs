@@ -5,11 +5,12 @@ namespace WebApplication1.Interfaces.Services
 {
     public interface IWorkPositionService
     {
-        // alphabetic order
-        List<WorkPositionViewModel> GetAllActivePositions();
         bool CreateNewWorkPosition(WorkPositionViewModel workPositionViewModel);
-        bool DeletePosition(WorkPositionViewModel workPositionViewModel);
-        List<HistoryOfWorkPositionsViewModel> GetHistoryOfWorkPositions(int employeeId);
 
+        bool DeletePosition(WorkPositionViewModel workPositionViewModel);
+
+        List<WorkPositionViewModel> GetAllActivePositions();
+
+        List<HistoryOfWorkPositionsViewModel> GetHistoryOfWorkPositions(int employeeId);
     }
 }

@@ -23,10 +23,9 @@ namespace WebApplication1.Models
         public DateTime OnBoardDate { get; set; }
 
         [Required]
-        [ForeignKey("Employee")]
+        [ForeignKey("WorkPosition")]
         public int WorkPositionId { get; set; }
         
-        [Required]
         public WorkPositionModel WorkPosition { get; set; }
 
         [Required]

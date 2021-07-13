@@ -15,7 +15,7 @@
             <v-row>
               <v-col cols="12" sm="12" md="12">
                 <v-text-field
-                class="shrink"
+                  class="shrink"
                   v-model="newWorkPosition.workPositionName"
                   label="Name"
                   :counter="15"
@@ -29,13 +29,14 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="close" > Cancel </v-btn>
+        <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
         <v-btn
           :disabled="!valid"
           color="blue darken-1"
           text
-          @click="createNewWorkPosition">
-           Create
+          @click="createNewWorkPosition"
+        >
+          Create
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -56,18 +57,15 @@ export default {
     positions: [],
     dialog: false,
     newWorkPosition: {
-      workPositionName: ""
-  }}),
-
+      workPositionName: "",
+    },
+  }),
   watch: {
     dialog(val) {
       val || this.close();
     },
   },
-
-  created() {
-  },
-
+  created() {},
   methods: {
     close() {
       this.dialog = false;
@@ -81,7 +79,7 @@ export default {
       WorkPositionService.createNewWorkPosition(this.newWorkPosition).then(
         (response) => {
           console.log(response);
-          this.$emit('createdNewWorkPosition', 'true');
+          this.$emit("createdNewWorkPosition", "true");
           this.newWorkPosition.workPositionName = "";
         },
         (error) => {

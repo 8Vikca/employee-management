@@ -100,6 +100,7 @@ namespace WebApplication1.Repositories
             employee.IsDeleted = true;
             _appDbContext.Employees.Update(employee);
             _appDbContext.SaveChanges();
+
             return true;
         }
         public bool MoveEmployeeToArchive(EmployeeModel employee)
@@ -108,8 +109,10 @@ namespace WebApplication1.Repositories
 
             var historyWorkPositionById = _appDbContext.WorkPositionsHistory.FirstOrDefault(x => x.EmployeeId == employee.Id && x.EndDate == null);
             historyWorkPositionById.EndDate = DateTime.UtcNow.Date;
+
             _appDbContext.WorkPositionsHistory.Update(historyWorkPositionById);
             _appDbContext.SaveChanges();
+
             return true;
 
         }

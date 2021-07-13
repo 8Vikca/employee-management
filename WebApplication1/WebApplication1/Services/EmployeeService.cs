@@ -11,28 +11,28 @@ namespace WebApplication1.Services
     public class EmployeeService : IEmployeeService
     {
         IEmployeeRepository _employeeRepository;
-        IWorkPositionRepository _workPositionRepository;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IWorkPositionRepository workPositionRepository)
+        public EmployeeService(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
-            _workPositionRepository = workPositionRepository;
         }
 
         public List<EmployeeViewModel> GetActiveEmployees()
         {
             var employeeRepository = _employeeRepository.GetActiveEmployees().ToList();
-            var activeEmployeesList = ModelToViewModel(employeeRepository);
+            var activeEmployeesList = EmployeeModelToViewModel(employeeRepository);
+
             return activeEmployeesList;
         }
 
         public List<EmployeeViewModel> GetInactiveEmployees()
         {
             var employeeRepository = _employeeRepository.GetInActiveEmployees().ToList();
-            var inactiveEmployeesList = ModelToViewModel(employeeRepository);
+            var inactiveEmployeesList = EmployeeModelToViewModel(employeeRepository);
+
             return inactiveEmployeesList;
         }
-        private List<EmployeeViewModel> ModelToViewModel(List<EmployeeModel> employeeModel)
+        private List<EmployeeViewModel> EmployeeModelToViewModel(List<EmployeeModel> employeeModel)
         {
             var employeesList = new List<EmployeeViewModel>();
 
@@ -51,6 +51,7 @@ namespace WebApplication1.Services
                 };
                 employeesList.Add(employee);
             }
+
             return employeesList;
         }
 
@@ -107,8 +108,10 @@ namespace WebApplication1.Services
                 {
                     return false;
                 }
+
                 employeeById.ArchivedDate = DateTime.Parse(employee.ArchivedDate).Date;
                 _employeeRepository.MoveEmployeeToArchive(employeeById);
+
                 return true;
             }
             catch (Exception e)

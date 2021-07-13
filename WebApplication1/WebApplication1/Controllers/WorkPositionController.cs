@@ -47,7 +47,6 @@ namespace WebApplication1.Controllers
         [HttpPost("/getHistoryOfWorkPositions")]
         public List<HistoryOfWorkPositionsViewModel> getHistoryOfPositions([FromBody] int employeeId)
         {
-
             return _workPositionService.GetHistoryOfWorkPositions(employeeId);
         }
     }

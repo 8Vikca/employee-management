@@ -131,8 +131,9 @@
           :disabled="!valid"
           color="blue darken-1"
           text
-          @click="createNewEmployee">
-           Create
+          @click="createNewEmployee"
+        >
+          Create
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -141,7 +142,7 @@
 
 <script>
 import EmployeeService from "../Services/EmployeeService";
-import WorkPositionService from '../Services/WorkPositionService';
+import WorkPositionService from "../Services/WorkPositionService";
 
 export default {
   name: "NewEmployee",
@@ -173,7 +174,9 @@ export default {
       surname: "",
       address: "",
       birthDate: "",
-      onBoardDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      onBoardDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10),
       workPositionName: "",
       salary: "",
     },
@@ -182,28 +185,25 @@ export default {
       surname: "",
       address: "",
       birthDate: "",
-      onBoardDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      onBoardDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10),
       workPositionName: "",
       salary: "",
     },
   }),
 
   watch: {
-    menu (val) {
-        val && setTimeout(() => (this.activePicker = 'YEAR'))
-      },
-    // dialog(val) {
-    //   val || this.close();
-    // },
+    menu(val) {
+      val && setTimeout(() => (this.activePicker = "YEAR"));
+    },
     dialogDelete(val) {
       val || this.closeDelete();
     },
   },
-
   created() {
     this.retrieveWorkPositions();
   },
-
   methods: {
     saveBirthDate(date) {
       this.$refs.menu.save(date);
@@ -220,7 +220,6 @@ export default {
           console.log(e);
         });
     },
-
     close() {
       this.show = false;
       this.$nextTick(() => {
@@ -228,7 +227,6 @@ export default {
         this.editedIndex = -1;
       });
     },
-
     closeDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
@@ -236,13 +234,12 @@ export default {
         this.editedIndex = -1;
       });
     },
-
     createNewEmployee() {
       this.close();
       EmployeeService.createNewEmployee(this.newEmployee).then(
         (response) => {
           console.log(response);
-          this.$emit('createdNewEmployee', 'true') 
+          this.$emit("createdNewEmployee", "true");
           this.newEmployee = Object.assign({}, this.defaultItem);
         },
         (error) => {

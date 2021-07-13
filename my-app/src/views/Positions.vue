@@ -50,10 +50,9 @@ export default {
       { text: "Name", align: "start", value: "workPositionName" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    editedIndex: -1,
     editedItem: {
       workPositionId: -1,
-      workPositionName: ""
+      workPositionName: "",
     },
     defaultItem: {
       Id: -1,
@@ -95,40 +94,33 @@ export default {
     },
     deleteItem(item) {
       console.log(item);
-      this.editedIndex = this.positions.indexOf(item) + 1;
       this.editedItem = {
-        id: this.editedIndex,
-        workPositionName: item.workPositionName
-      }
-
+        id: item.id,
+        workPositionName: item.workPositionName,
+      };
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      WorkPositionService.deleteWorkPosition(this.editedItem) 
-      .then((response) => {
+      WorkPositionService.deleteWorkPosition(this.editedItem)
+        .then((response) => {
           console.log(response);
           this.retrievePositions();
-          })
+        })
         .catch((e) => {
           console.log(e);
         });
-      
-      // this.desserts.splice(this.editedIndex, 1);
       this.closeDelete();
-      
     },
     close() {
       this.dialog = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
       });
     },
     closeDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
       });
     },
   },

@@ -59,6 +59,7 @@ namespace WebApplication1.Services
                     return false;
                 }
                 _workPositionRepository.RemoveWorkPosition(workPositionByName);
+
                 return true;
             }
             catch (Exception e)
@@ -82,7 +83,6 @@ namespace WebApplication1.Services
                     WorkPositionName = historyPosition.WorkPosition.WorkPositionName,
                     StartDate = historyPosition.StartDate.ToString(),
                     EndDate = historyPosition.EndDate.ToString()
-
                 };
                 listOfHistoryWorkPositions.Add(historyPositionViewModel);
             }

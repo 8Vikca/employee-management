@@ -40,12 +40,13 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost("/editEmployee")]
-        public IActionResult EditEmployee([FromBody] EditEmployeeViewModel editEmployeeViewModel)           
+        public IActionResult EditEmployee([FromBody] EditEmployeeViewModel editEmployeeViewModel)
         {
             if (_employeeService.EditEmployee(editEmployeeViewModel))
             {
                 return Ok();
             }
+
             return BadRequest();
         }
 
@@ -56,6 +57,7 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest();
             }
+
             return Ok();
         }
 
@@ -66,6 +68,7 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest();
             }
+
             return Ok();
         }
     }

@@ -89,7 +89,7 @@
 
             <template>
               <v-data-table
-              height="150px"
+                height="150px"
                 :headers="headers"
                 fixed-header
                 :items="editedEmployee.historyOfWorkPositions"
@@ -128,10 +128,10 @@ export default {
   props: ["visible", "editedEmployee"],
   data: () => ({
     headers: [
-          { text: 'Work Position', sortable: false, value: 'workPositionName' },
-          { text: 'StartDate', value: 'startDate' },
-          { text: 'EndDate', value: 'endDate' },
-        ],
+      { text: "Work Position", sortable: false, value: "workPositionName" },
+      { text: "StartDate", value: "startDate" },
+      { text: "EndDate", value: "endDate" },
+    ],
     activePicker: null,
     nameRules: [
       (v) => !!v || "Name is required",
@@ -140,9 +140,7 @@ export default {
     valid: false,
     menu: false,
     positions: [],
-    menu2: false,
     dialog: false,
-    dataRendered: false,
   }),
   watch: {
     menu(val) {

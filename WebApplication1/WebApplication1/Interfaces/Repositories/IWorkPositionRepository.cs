@@ -7,12 +7,19 @@ namespace WebApplication1.Interfaces.Repositories
 {
     public interface IWorkPositionRepository
     {
-        IEnumerable<WorkPositionModel> GetAllActiveWorkPositions();
-        bool CreateNewWorkPosition(WorkPositionViewModel newWorkPositionModel);
-        WorkPositionModel FindPositionByName(string workPositionName);
-        bool RemoveWorkPosition(WorkPositionModel workPosition);
         bool AddWorkPositionToHistory(NewEmployeeViewModel employee, int workPositionId);
+
+        bool CreateNewWorkPosition(WorkPositionViewModel newWorkPositionModel);
+
         bool EditWorkPositionInHistory(EditEmployeeViewModel employeeModel, int employeeId);
+
+        WorkPositionModel FindPositionByName(string workPositionName);
+
+        IEnumerable<WorkPositionModel> GetAllActiveWorkPositions();
+
         IEnumerable<WorkPositionsHistoryModel> GetHistoryOfPositionsByEmployee(int employeeId);
+
+        bool RemoveWorkPosition(WorkPositionModel workPosition);     
+
     }
 }

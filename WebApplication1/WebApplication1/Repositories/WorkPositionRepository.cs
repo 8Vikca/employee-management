@@ -21,15 +21,6 @@ namespace WebApplication1.Repositories
 
         public IEnumerable<WorkPositionModel> GetAllActiveWorkPositions()
         {
-            //var pos = _appDbContext.WorkPositions;
-            //foreach (var item in pos)
-            //{
-            //    item.IsActive = true;
-            //    _appDbContext.WorkPositions.Update(item);
-
-
-            //}
-            //_appDbContext.SaveChanges();
             var activeWorkPositions = _appDbContext.WorkPositions.Where(x => x.IsActive);
             return activeWorkPositions;
         }
@@ -62,8 +53,10 @@ namespace WebApplication1.Repositories
         public bool RemoveWorkPosition(WorkPositionModel workPosition) 
         {
             workPosition.IsActive = false;
+
             _appDbContext.WorkPositions.Update(workPosition);
             _appDbContext.SaveChanges();
+
             return true;
         }
 
@@ -76,16 +69,17 @@ namespace WebApplication1.Repositories
                 EndDate = null,
                 WorkPositionId = workPositionId
             };
+
             _appDbContext.WorkPositionsHistory.Add(workPositionsHistoryModel);
             _appDbContext.SaveChanges();
+
             return true;
         }
         public bool EditWorkPositionInHistory(EditEmployeeViewModel editedEmployeeModel, int employeeId)
         {
             var historyWorkPositionById = _appDbContext.WorkPositionsHistory.FirstOrDefault(x => x.EmployeeId == employeeId && x.EndDate == null);
             historyWorkPositionById.EndDate = DateTime.UtcNow.Date;
-            _appDbContext.WorkPositionsHistory.Update(historyWorkPositionById);
-            _appDbContext.SaveChanges();
+
 
             var workPositionsHistoryModel = new WorkPositionsHistoryModel
             {
@@ -95,6 +89,7 @@ namespace WebApplication1.Repositories
                 WorkPositionId = _appDbContext.WorkPositions.FirstOrDefault(x => x.WorkPositionName == editedEmployeeModel.WorkPositionName).Id
             };
 
+            _appDbContext.WorkPositionsHistory.Update(historyWorkPositionById);
             _appDbContext.WorkPositionsHistory.Add(workPositionsHistoryModel);
             _appDbContext.SaveChanges();
 
