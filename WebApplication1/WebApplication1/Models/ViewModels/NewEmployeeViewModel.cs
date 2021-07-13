@@ -11,7 +11,7 @@ namespace WebApplication1.Models.ViewModels
         public DateTime BirthDate { get; set; }
         public string WorkPositionName { get; set; }
         public string Salary { get; set; }
-        public DateTime? DeletedDate { get; set; }
+        public DateTime? ArchivedDate { get; set; }
         public DateTime OnBoardDate { get; set; }
     }
 }

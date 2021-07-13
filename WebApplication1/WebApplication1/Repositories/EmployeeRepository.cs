@@ -23,7 +23,7 @@ namespace WebApplication1.Repositories
         {
             try
             {
-                var activeEmployee = _appDbContext.Employees.Include(x => x.WorkPosition).Where(x => x.DeletedDate == null);
+                var activeEmployee = _appDbContext.Employees.Include(x => x.WorkPosition).Where(x => x.ArchivedDate == null && x.IsDeleted == false);
                 return activeEmployee;
             }
             catch (Exception ex)
@@ -34,7 +34,7 @@ namespace WebApplication1.Repositories
 
         public IEnumerable<EmployeeModel> GetInActiveEmployees()
         {
-            var activeEmployee = _appDbContext.Employees.Include(x => x.WorkPosition).Where(x => x.DeletedDate != null);
+            var activeEmployee = _appDbContext.Employees.Include(x => x.WorkPosition).Where(x => x.ArchivedDate != null && x.IsDeleted == false);
             return activeEmployee;
         }
 
@@ -53,7 +53,8 @@ namespace WebApplication1.Repositories
                 OnBoardDate = newEmployee.OnBoardDate.Date,
                 Salary = Convert.ToDouble(newEmployee.Salary),
                 WorkPositionId = findWorkPositionId.Id,
-                DeletedDate = null
+                ArchivedDate = null,
+                IsDeleted = false,
             };
 
             _appDbContext.Employees.Add(employeeModel);
@@ -96,7 +97,8 @@ namespace WebApplication1.Repositories
 
         public bool RemoveEmployee(EmployeeModel employee)
         {
-            _appDbContext.Employees.Remove(employee);
+            employee.IsDeleted = true;
+            _appDbContext.Employees.Update(employee);
             _appDbContext.SaveChanges();
             return true;
         }

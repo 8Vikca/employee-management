@@ -63,19 +63,12 @@ export default {
     dialog(val) {
       val || this.close();
     },
-    // dialogDelete(val) {
-    //   val || this.closeDelete();
-    // },
   },
 
   created() {
   },
 
   methods: {
-    // deleteItemConfirm() {
-    //   this.desserts.splice(this.editedIndex, 1);
-    //   this.closeDelete();
-    // },
     close() {
       this.dialog = false;
       this.$nextTick(() => {
@@ -83,15 +76,6 @@ export default {
         this.editedIndex = -1;
       });
     },
-
-    // closeDelete() {
-    //   this.dialogDelete = false;
-    //   this.$nextTick(() => {
-    //     this.editedItem = Object.assign({}, this.defaultItem);
-    //     this.editedIndex = -1;
-    //   });
-    // },
-
     createNewWorkPosition() {
       this.close();
       WorkPositionService.createNewWorkPosition(this.newWorkPosition).then(

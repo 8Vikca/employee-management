@@ -32,7 +32,9 @@ namespace WebApplication1.Models
         [Required]
         public double Salary { get; set; }
 
-        public DateTime? DeletedDate { get; set; }
+        public DateTime? ArchivedDate { get; set; }
+
+        public bool IsDeleted { get; set; }
 
     }
 }

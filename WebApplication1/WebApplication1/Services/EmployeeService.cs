@@ -47,7 +47,7 @@ namespace WebApplication1.Services
                     BirthDate = item.BirthDate,
                     Salary = item.Salary,
                     WorkPositionName = item.WorkPosition.WorkPositionName,
-                    DeletedDate = item.DeletedDate
+                    ArchivedDate = item.ArchivedDate
                 };
                 employeesList.Add(employee);
             }
@@ -107,7 +107,7 @@ namespace WebApplication1.Services
                 {
                     return false;
                 }
-                employeeById.DeletedDate = DateTime.Parse(employee.DeletedDate).Date;
+                employeeById.ArchivedDate = DateTime.Parse(employee.ArchivedDate).Date;
                 _employeeRepository.MoveEmployeeToArchive(employeeById);
                 return true;
             }

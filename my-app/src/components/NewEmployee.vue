@@ -1,10 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn color="dark-grey" dark class="mb-2" v-bind="attrs" v-on="on">
-        New Employee
-      </v-btn>
-    </template>
+  <v-dialog v-model="show" max-width="600px">
     <v-card>
       <v-card-title>
         <span class="text-h5"> New Employee</span>
@@ -150,6 +145,19 @@ import WorkPositionService from '../Services/WorkPositionService';
 
 export default {
   name: "NewEmployee",
+  props: ["visible", "createdNewEmployee"],
+  computed: {
+    show: {
+      get() {
+        return this.visible;
+      },
+      set(value) {
+        if (!value) {
+          this.$emit("close");
+        }
+      },
+    },
+  },
   data: () => ({
     activePicker: null,
     nameRules: [
@@ -160,7 +168,6 @@ export default {
     menu: false,
     positions: [],
     menu2: false,
-    dialog: false,
     newEmployee: {
       name: "",
       surname: "",
@@ -185,9 +192,9 @@ export default {
     menu (val) {
         val && setTimeout(() => (this.activePicker = 'YEAR'))
       },
-    dialog(val) {
-      val || this.close();
-    },
+    // dialog(val) {
+    //   val || this.close();
+    // },
     dialogDelete(val) {
       val || this.closeDelete();
     },
@@ -213,13 +220,9 @@ export default {
           console.log(e);
         });
     },
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
 
     close() {
-      this.dialog = false;
+      this.show = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;

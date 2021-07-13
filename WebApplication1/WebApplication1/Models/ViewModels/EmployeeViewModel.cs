@@ -12,6 +12,6 @@ namespace WebApplication1.Models.ViewModels
         public DateTime BirthDate { get; set; }
         public string WorkPositionName { get; set; }
         public double Salary { get; set; }
-        public DateTime? DeletedDate { get; set; }
+        public DateTime? ArchivedDate { get; set; }
     }
 }

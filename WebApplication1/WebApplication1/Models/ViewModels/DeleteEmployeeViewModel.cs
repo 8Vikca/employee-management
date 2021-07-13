@@ -8,6 +8,6 @@ namespace WebApplication1.Models.ViewModels
     public class DeleteEmployeeViewModel
     {
         public int Id { get; set; }
-        public string DeletedDate { get; set; }
+        public string ArchivedDate { get; set; }
     }
 }

@@ -180,7 +180,7 @@ export default {
     editEmployee() {
       this.show = false;
       Vue.delete(this.editedEmployee, "fullName");
-      Vue.delete(this.editedEmployee, "deletedDate");
+      Vue.delete(this.editedEmployee, "archivedDate");
       EmployeeService.editEmployee(this.editedEmployee).then(
         (response) => {
           console.log(response);

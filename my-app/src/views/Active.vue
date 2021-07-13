@@ -1,18 +1,35 @@
 <template>
-  <v-data-table :headers="headers" :items="employees" class="elevation-1">
-    <template v-slot:top>
-      <edit-employee
+  <div>
+    <v-toolbar flat>
+      <v-spacer></v-spacer>
+      <v-btn
+        color="dark-grey"
+        dark
+        class="mb-2"
+        @click="showNewEmployeeDialog = true"
+      >
+        New Employee
+      </v-btn>
+      
+    </v-toolbar>
+    <v-simple-table>
+      <template v-slot:default>
+        <new-employee @createdNewEmployee="getNewData"  :visible="showNewEmployeeDialog" @close="showNewEmployeeDialog = false"></new-employee>
+        <edit-employee
+        @createdNewEmployee="getNewData"
         :visible="showEditDialog"
         @close="showEditDialog = false"
         :editedEmployee="editedItem"
-        @createdNewEmployee="getNewData"
       >
       </edit-employee>
-      <v-toolbar flat>
-        <v-spacer></v-spacer>
-        <new-employee @createdNewEmployee="getNewData"></new-employee>
+      
+      <detail-employee
+        :visible="showDetailDialog"
+        :detailedEmployee="editedItem"
+        @close="showDetailDialog = false"
+      ></detail-employee>
 
-        <v-dialog v-model="dialogDelete" max-width="500px">
+      <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5">
               Do you want to archive this employee?
@@ -29,24 +46,28 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-      </v-toolbar>
-    </template>
-
-    <template v-slot:[`item.actions`]="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-        
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-    </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="retrieveEmployees"> Reset </v-btn>
-    </template>
-  </v-data-table>
+        <thead>
+          <tr>
+            <th class="text-left">Name</th>
+            <th class="text-left">Work Position</th>
+            <th class="text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in employees" :key="item.fullName">
+            <td @click="openEmployeeDetail(item)">{{ item.fullName }}</td>
+            <td>{{ item.workPositionName }}</td>
+            <td>
+              <v-icon small class="mr-2" @click="editItem(item)">
+                mdi-pencil
+              </v-icon>
+              <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+            </td>
+          </tr>
+        </tbody>
+      </template>
+    </v-simple-table>
+  </div>
 </template>
 
 
@@ -55,15 +76,20 @@ import EmployeeService from "../Services/EmployeeService";
 import WorkPositionService from "../Services/WorkPositionService";
 import NewEmployee from "../components/NewEmployee.vue";
 import EditEmployee from "../components/EditEmployee.vue";
+import DetailEmployee from "../components/DetailEmployee.vue";
 
 export default {
   name: "Active",
   components: {
     NewEmployee,
     EditEmployee,
+    DetailEmployee,
   },
   data: () => ({
     showEditDialog: false,
+    editDialog: false,
+    showDetailDialog: false,
+    showNewEmployeeDialog: false,
     date: null,
     menu: false,
     positions: [],
@@ -76,7 +102,7 @@ export default {
       { text: "Actions", value: "actions", sortable: false },
     ],
     employees: [],
-  
+
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -90,7 +116,7 @@ export default {
     },
     deletedItem: {
       id: 0,
-      deletedDate: "",
+      archivedDate: "",
     },
     defaultItem: {
       name: "",
@@ -112,6 +138,24 @@ export default {
   },
 
   methods: {
+    openEmployeeDetail(item) {
+      this.editedItem = Object.assign({}, item);
+      this.editedItem.birthDate = this.editedItem.birthDate.split("T")[0];
+      WorkPositionService.getHistoryOfWorkPositions(item.id)
+        .then((response) => {
+          this.editedItem.historyOfWorkPositions = [];
+          response = response.data;
+          response.forEach((element) => {
+            element.startDate = element.startDate.split(" ")[0];
+            element.endDate = element.endDate.split(" ")[0];
+            this.editedItem.historyOfWorkPositions.push(element);
+          });
+          this.showDetailDialog = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+     },
     getNewData(value) {
       console.log(value);
       this.retrieveEmployees();
@@ -131,7 +175,7 @@ export default {
               salary: element.salary,
               birthDate: element.birthDate,
               address: element.address,
-              deletedDate: element.deletedDate,
+              archivedDate: element.archivedDate,
             });
           });
         })
@@ -158,20 +202,19 @@ export default {
     editItem(item) {
       this.editedIndex = this.employees.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.getHistoryOfWorkPositions(item.id);      
+      this.getHistoryOfWorkPositions(item.id);
       this.editedItem.birthDate = this.editedItem.birthDate.split("T")[0];
-      console.log(this.editedItem);
     },
     deleteItem(item) {
       this.editedIndex = this.positions.indexOf(item) + 1;
       this.deletedItem = {
         id: item.id,
-        deletedDate: "",
+        archivedDate: "",
       };
       this.dialogDelete = true;
     },
     deleteItemArchive() {
-      this.deletedItem.deletedDate = new Date(
+      this.deletedItem.archivedDate = new Date(
         Date.now() - new Date().getTimezoneOffset() * 60000
       )
         .toISOString()
@@ -194,7 +237,7 @@ export default {
       });
     },
     deleteItemNoArchive() {
-      this.deletedItem.deletedDate = "";
+      this.deletedItem.archivedDate = "";
       EmployeeService.deleteEmployee(this.deletedItem)
         .then((response) => {
           console.log(response);
@@ -215,3 +258,53 @@ export default {
   },
 };
 </script>
+<!-- <v-data-table
+    :headers="headers"
+    :items="employees"
+    class="elevation-1"
+    @click:row="openEmployeeDetail($event)"
+  >
+    <template v-slot:top>
+      <edit-employee
+        :visible="showEditDialog"
+        @close="showEditDialog = false"
+        :editedEmployee="editedItem"
+      >
+      </edit-employee>
+      <v-toolbar flat>
+        <v-spacer></v-spacer>
+        <new-employee @createdNewEmployee="getNewData"></new-employee>
+        <detail-employee
+          :visible="showDetailDialog"
+          :detailedEmployee="editedItem"
+          @close="showDetailDialog = false"
+        ></detail-employee>
+
+        <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-card>
+            <v-card-title class="text-h5">
+              Do you want to archive this employee?
+            </v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="deleteItemNoArchive"
+                >No</v-btn
+              >
+              <v-btn color="red darken-1" text @click="deleteItemArchive">
+                Yes
+              </v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+    </template>
+
+    <template v-slot:[`item.actions`]="{ item }">
+      <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+      <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+    </template>
+    <template v-slot:no-data>
+      <v-btn color="primary" @click="retrieveEmployees"> Reset </v-btn>
+    </template>
+  </v-data-table> -->

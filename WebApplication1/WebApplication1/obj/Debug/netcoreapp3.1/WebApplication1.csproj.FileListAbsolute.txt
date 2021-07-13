@@ -125,4 +125,3 @@ C:\Users\viktoria.matusicova\employee-management\WebApplication1\WebApplication1
 C:\Users\viktoria.matusicova\employee-management\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.dll
 C:\Users\viktoria.matusicova\employee-management\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.pdb
 C:\Users\viktoria.matusicova\employee-management\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.genruntimeconfig.cache
-C:\Users\viktoria.matusicova\employee-management\WebApplication1\WebApplication1\obj\Debug\netcoreapp3.1\WebApplication1.csproj.AssemblyReference.cache
